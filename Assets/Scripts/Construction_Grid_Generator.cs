@@ -43,7 +43,7 @@ public class Construction_Grid_Generator : MonoBehaviour
             if (Physics.Raycast(ray, out hit))
             {
                 GameObject objectHit = hit.transform.gameObject;
-                //grid_Node.transform.position = hit.point;
+                grid_Node.transform.position = hit.point;
                 //UpdateGridSelectionByMouse(hit.point);
                 MousePositionByGridMatrix(hit.point,
                     up_left_limit_Node.transform.position,
@@ -80,34 +80,71 @@ public class Construction_Grid_Generator : MonoBehaviour
               mousePos.z > up_left.z || mousePos.z < down_right.z)
             { return;        }
 
-        // obtenemos espacio de trabajo, y lo centramos en 0,0.
-        float difference_in_X = down_right.x - up_left.x - up_left.x;
-        float difference_in_Z = up_left.z - down_right.z - down_right.z;
-        float mouse_pos_x = mousePos.x - up_left.x;
-        float mouse_pos_z = mousePos.z - down_right.z;
-
-
-        // en cuanto dividimos el espacio de trabajo.
-        float diff_to_row = difference_in_X / row_number;
-        float diff_to_col = difference_in_Z / column_number;
-
-        //Ahora, tenemos que ver como trasladar coordenadas. 
+        //Tamaño del grid en coordenadas.
+        float grid_X_size = down_right.x - up_left.x;
+        float grid_Z_size = up_left.z - down_right.z;
         
-        float x_by_grid = mouse_pos_x / diff_to_row;
-        float z_by_grid = mouse_pos_z / diff_to_col;
+        //Tamaño de cada celda, dependiendo del tamaño del grid y el numero de celdas.
+        float cell_X_size = grid_X_size / row_number;
+        float cell_Z_size = grid_Z_size / column_number;
 
+
+        /**
+        //WTL = World to Local.
+        //Debemos trasladar de posicion global a posicion local de la matriz. 
+
+        float WTL_pos_x = mousePos.x;
+        float WTL_pos_z = mousePos.z;
+
+        //MTG = mouse to grid
+        //sacamos posicion de raton, relativa al tamaño de celda, para saber en cual se encuentran.
+        float MTG_pos_x = WTL_pos_x / cell_X_size;
+        float MTG_pos_z = WTL_pos_z / cell_Z_size;
+
+        //Sacamos los indices para trabajar con las matrices.
+        int MTG_index_x = Mathf.RoundToInt(MTG_pos_x);
+        int MTG_index_z = Mathf.RoundToInt(MTG_pos_z);
 
 
         grid_Node.transform.position = mousePos;
-        //Debug.Log(x_by_grid + " for X coordinates. ");
-        Debug.Log(z_by_grid + " for z coordinates. ");
+        //Debug.Log(MIG_pos_x + " for X coordinates. ");
+        Debug.Log(MTG_index_z + " for z coordinates. ");
+        //*/
+
+        //Conversion de espacio de trabajo en plan textura? 
+        // Multiplicacion de coordenadas por la mitad del espacio de trabajo + sumar esa mitad.
+        // Ejemplo: cambio de -1 a 1, a 0 a 1: 
+        //* (0.5) --> para cambiar de -1 a 1, a -0.5 a 0.5
+        //+ (0.5) --> para cambiar de -0.5 a 0.5, a 0 a 1.
+
+        float initial_mouse_Pos_X = mousePos.x;
+        float initial_mouse_Pos_Z = mousePos.z;
+
+        //De -size a size, de -1 a 1. Perdemos datos por falta de precision (0.03 de 1?)
+        double position_inside_grid_X = ((initial_mouse_Pos_X * 1 / (grid_X_size / 2)) + (1 /(grid_X_size / 2)));
+        double position_inside_grid_Z = ((initial_mouse_Pos_Z * 1 / (grid_Z_size / 2)) + 1 /(grid_Z_size / 2));
         
+        //De 0 a 1.
+        double normalized_pos_grid_X = (position_inside_grid_X * 0.5f) + 0.5f;
+        double normalized_pos_grid_Z = (position_inside_grid_Z * 0.5f) + 0.5f;
+
+        //Debug.Log(grid_X_size + " X size");
+        //Debug.Log(grid_Z_size + " Z size");
+
+
+        //Debug.Log(((down_right_limit_Node.transform.position.x * 1 / (grid_X_size / 2)) + (1 / (grid_X_size / 2))) + " X max");
+        //Debug.Log(((up_left_limit_Node.transform.position.x * 1 / (grid_X_size / 2)) + (1 / (grid_X_size / 2))) + " X min");
+        //Debug.Log(((down_right_limit_Node.transform.position.z * 1 / (grid_Z_size / 2)) + (1 / (grid_Z_size / 2))) + " Z min");
+        //Debug.Log(((up_left_limit_Node.transform.position.z* 1 / (grid_Z_size / 2)) + (1 / (grid_Z_size / 2))) + " Z max");
+
+        Debug.Log(normalized_pos_grid_X + "X coordinates");
+        //Debug.Log(normalized_pos_grid_Z + "Z coordinates");
 
     }
 
 
 
-   void UpdateGridSelectionByMouse(Vector3 impactPoint)
+    void UpdateGridSelectionByMouse(Vector3 impactPoint)
     {
         float min_X = grid_matrix[0][0].transform.position.x;
         float min_Z = grid_matrix[0][0].transform.position.z;

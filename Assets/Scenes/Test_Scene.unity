@@ -533,27 +533,27 @@ PrefabInstance:
     - target: {fileID: 3447577203340617849, guid: 2f4c99e12a8c04e4a981796a71348353,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 6.71
+      value: -18
       objectReference: {fileID: 0}
     - target: {fileID: 3447577203340617849, guid: 2f4c99e12a8c04e4a981796a71348353,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.022962164
+      value: 0.17490274
       objectReference: {fileID: 0}
     - target: {fileID: 3447577203340617849, guid: 2f4c99e12a8c04e4a981796a71348353,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.97605896
+      value: -0.0000015229285
       objectReference: {fileID: 0}
     - target: {fileID: 3447577203340617849, guid: 2f4c99e12a8c04e4a981796a71348353,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.17339188
+      value: 0.000008573073
       objectReference: {fileID: 0}
     - target: {fileID: 3447577203340617849, guid: 2f4c99e12a8c04e4a981796a71348353,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: -0.12929425
+      value: 0.98458576
       objectReference: {fileID: 0}
     - target: {fileID: 3447577203340617849, guid: 2f4c99e12a8c04e4a981796a71348353,
         type: 3}
@@ -563,17 +563,17 @@ PrefabInstance:
     - target: {fileID: 3447577203340617849, guid: 2f4c99e12a8c04e4a981796a71348353,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 17.5
+      value: 20.146002
       objectReference: {fileID: 0}
     - target: {fileID: 3447577203340617849, guid: 2f4c99e12a8c04e4a981796a71348353,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 109.65
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3447577203340617849, guid: 2f4c99e12a8c04e4a981796a71348353,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
+      value: 0.001
       objectReference: {fileID: 0}
     - target: {fileID: 3447577203340617853, guid: 2f4c99e12a8c04e4a981796a71348353,
         type: 3}
