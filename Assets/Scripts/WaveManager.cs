@@ -2,13 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GlobalGameStats : MonoBehaviour
+public class WaveManager : MonoBehaviour
 {
+    [Header("Enemy variables")]
+    public GameObject[] enemyTypes;
+    public List<GameObject> currentWaveEnemies;
 
-    //Añadir partes de script de grid.
+    [Header("Game variables")]
+    public int currentWave;
+
+
     // Start is called before the first frame update
     void Start()
     {
+        currentWave = 1;
         
     }
 
@@ -17,4 +24,10 @@ public class GlobalGameStats : MonoBehaviour
     {
         
     }
+
+
+
+
+
+
 }
