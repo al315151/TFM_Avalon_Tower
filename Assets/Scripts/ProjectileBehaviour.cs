@@ -10,7 +10,9 @@ public class ProjectileBehaviour : MonoBehaviour
     {
         //print("Entramos?");
         if (other.gameObject != father)
-        { WaveManager.currentInstance.ReduceLifeFromObjective(other.gameObject, this.gameObject); }
-        Destroy(this.gameObject);
+        {
+            WaveManager.currentInstance.ReduceLifeFromObjective(other.gameObject, this.gameObject); 
+            Destroy(this.gameObject);
+        }
     }
 }

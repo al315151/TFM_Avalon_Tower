@@ -41,22 +41,32 @@ public class CustomFPSMovement : MonoBehaviour
             }
             else { movementSpeed = 5f; }
 
-            //if (CheckGrounded())
-            //{
             PlayerMovement();
-            //}
-            //else
-            //{
-            //    transform.position = new Vector3(transform.position.x,
-            //                                    transform.position.y - 9.8f * Time.deltaTime,
-            //                                    transform.position.z);
-            //}
-
             PlayerRotation();
 
-            if (Input.GetMouseButtonDown(0))
+            if (Input.GetMouseButtonDown(0) && Input.GetKey(KeyCode.E) == false)
             {
                 ShootAtObjective();
+            }
+            else if (Input.GetKey(KeyCode.E))
+            {
+                WaveManager.currentInstance.turret_GO.SetActive(true);
+                RaycastHit hit;
+                Ray ray = GetComponent<Camera>().ScreenPointToRay(Input.mousePosition);
+
+                if (Physics.Raycast(ray, out hit))
+                {                    
+                    WaveManager.currentInstance.turret_GO.transform.position = hit.point;
+                }
+            }
+            else if (Input.GetKeyUp(KeyCode.E) && WaveManager.currentInstance.availableTurrets > 0)
+            {
+                GameObject newTurret = Instantiate(WaveManager.currentInstance.turret_GO,
+                                                    WaveManager.currentInstance.turret_GO.transform.position,
+                                                    WaveManager.currentInstance.turret_GO.transform.rotation);
+                WaveManager.currentInstance.turret_GO.SetActive(false);
+                WaveManager.currentInstance.availableTurrets--;
+                WaveManager.currentInstance.UpdateAvailableTurretsText();
             }
         }
     }

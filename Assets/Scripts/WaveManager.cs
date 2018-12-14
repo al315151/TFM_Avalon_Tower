@@ -18,6 +18,7 @@ public class WaveManager : MonoBehaviour
     [Header("Environment & player variables")]
     public GameObject doorGameObject;
     public GameObject player_Reference_GO;
+    public GameObject turret_GO;
     float doorLife = 300f;
     float playerLife = 150f;
 
@@ -27,6 +28,8 @@ public class WaveManager : MonoBehaviour
     public static WaveManager currentInstance;
     public GameObject[] spawners;
     public Transform enemyPool;
+
+    public int availableTurrets;
 
     [Header("UI variables")]
     public GameObject doorUIHolder;
@@ -44,6 +47,10 @@ public class WaveManager : MonoBehaviour
     public Text GameOverText;
     float timerToReset = 0.0f;
 
+    public GameObject availableTurretsUIHolder;
+    public Text availableTurretsText;
+
+
     public GameObject MainMenu_GO;
     [HideInInspector]
     public bool gameStarted = false;
@@ -54,6 +61,8 @@ public class WaveManager : MonoBehaviour
         currentInstance = this;
         gameStarted = false;
         MainMenu_GO.SetActive(true);
+        turret_GO.SetActive(false);
+        availableTurretsUIHolder.SetActive(false);
     }
 
     // Update is called once per frame
@@ -138,7 +147,12 @@ public class WaveManager : MonoBehaviour
             else { playerLife -= 10f; }
            
         }
-
+        else if (objective.tag == "Finish")
+        {
+            if (sender.name.Contains("Missile"))
+            { objective.GetComponent<TurretBehaviour>().ReceiveDamage(5f); }
+            else { objective.GetComponent<TurretBehaviour>().ReceiveDamage(10f); }
+        }
         if ((doorLife <= 0.0f || playerLife <= 0.0f) && GameOverUIHolder.activeInHierarchy == false)
         {
             //print("Se llama");
@@ -148,6 +162,9 @@ public class WaveManager : MonoBehaviour
 
     public void ProceedToNextWave()
     {
+        availableTurrets += 2;
+        UpdateAvailableTurretsText();
+
         currentWave++;
         float numberOfEnemies = currentWave * 10;
         activeEnemyIndex = 0;
@@ -224,11 +241,16 @@ public class WaveManager : MonoBehaviour
         completedWaves.text = "Completed Waves: " + number + "  ";
     }
 
+    public void UpdateAvailableTurretsText()
+    {
+        availableTurretsText.text = "Available turrets: " + availableTurrets;
+    }
+
     void GameOverAnimation()
     {
         doorUIHolder.gameObject.SetActive(false);
         playerUIHolder.gameObject.SetActive(false);
-
+        availableTurretsUIHolder.SetActive(false);
         GameOverUIHolder.gameObject.SetActive(true);
         GameOverText.gameObject.SetActive(false);
         completedWaves.gameObject.SetActive(false);
@@ -239,8 +261,16 @@ public class WaveManager : MonoBehaviour
     public void StartGame()
     {
         MainMenu_GO.SetActive(false);
+
+        availableTurretsUIHolder.SetActive(true);
+        availableTurrets = 1;
+        UpdateAvailableTurretsText();
+
         currentWave = 0;
         ProceedToNextWave();
+
+        doorUIHolder.SetActive(true);
+        playerUIHolder.SetActive(true);
         SetUIProperties();
         GameOverUIHolder.gameObject.SetActive(false);
         gameStarted = true;
