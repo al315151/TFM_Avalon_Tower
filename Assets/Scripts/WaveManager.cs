@@ -17,8 +17,10 @@ public class WaveManager : MonoBehaviour
 
     [Header("Environment & player variables")]
     public GameObject doorGameObject;
+    public GameObject player_Reference_GO;
     float doorLife = 300f;
     float playerLife = 150f;
+
 
     [Header("Game variables")]
     public int currentWave;
@@ -122,7 +124,7 @@ public class WaveManager : MonoBehaviour
         {
             objective.GetComponent<EnemyBehaviour>().ReceiveDamage(20f, sender);
         }
-        else if (objective.name == doorGameObject.name && sender.tag != "MainCamera")
+        else if (objective.name == doorGameObject.name && sender.tag != "Player")
         {
             if (sender.name.Contains("Missile"))
             { doorLife -= 5f; }
@@ -134,12 +136,12 @@ public class WaveManager : MonoBehaviour
             if (sender.name.Contains("Missile"))
             { playerLife -= 5f; }
             else { playerLife -= 10f; }
-            print(playerLife);
+           
         }
 
         if ((doorLife <= 0.0f || playerLife <= 0.0f) && GameOverUIHolder.activeInHierarchy == false)
         {
-            print("Se llama");
+            //print("Se llama");
             GameOverAnimation(); }
         
     }
@@ -244,6 +246,8 @@ public class WaveManager : MonoBehaviour
         gameStarted = true;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+        if (player_Reference_GO == null)
+        { player_Reference_GO = GameObject.FindGameObjectWithTag("MainCamera"); }
     }
 
     public void QuitGame()

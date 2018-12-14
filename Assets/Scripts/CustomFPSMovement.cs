@@ -105,9 +105,9 @@ public class CustomFPSMovement : MonoBehaviour
 
         proj.name = gameObject.name + " Missile";
 
-        proj.GetComponent<Rigidbody>().AddForce(transform.forward * 1000f);
-        //Por si acaso, para eitar cosas injustas haremos que desaparezca en 5 seg si no choca con nada.
-        Destroy(proj, 5f);
+        proj.GetComponent<Rigidbody>().AddForce(transform.forward * 1500f);
+        //Por si acaso, para eitar cosas injustas haremos que desaparezca en 4 seg si no choca con nada.
+        Destroy(proj, 4f);
     }
 
 

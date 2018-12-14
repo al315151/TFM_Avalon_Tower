@@ -24,7 +24,7 @@ public class EnemyBehaviour : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        currentEnemyLife = 150f;
+        currentEnemyLife = 100f;
         shootTimer = 0f;
         enemyAnimator = GetComponent<Animator>();
         enemyNavAgent = GetComponent<NavMeshAgent>();
@@ -34,7 +34,7 @@ public class EnemyBehaviour : MonoBehaviour
         if (launchProjectileZone == null) //SOMOS MELEE
         {
             enemyNavAgent.speed = enemyNavAgent.speed * 2.5f;
-            currentEnemyLife = 80f;
+            currentEnemyLife = 60f;
             melee = true;
         }
 
@@ -154,9 +154,17 @@ public class EnemyBehaviour : MonoBehaviour
 
     public void SetNewTarget(GameObject obj)
     {
-        enemyNavAgent.SetDestination(obj.transform.position);
-        objective = obj;
-        print("Nuevo");
+        if (obj.tag == "Player")
+        {
+            enemyNavAgent.SetDestination(WaveManager.currentInstance.player_Reference_GO.transform.position);
+            objective = WaveManager.currentInstance.player_Reference_GO;
+        }
+        else
+        {
+            enemyNavAgent.SetDestination(obj.transform.position);
+            objective = obj;
+        }
+        print("Nuevo objetivo: " + obj.name);
     }
 
 

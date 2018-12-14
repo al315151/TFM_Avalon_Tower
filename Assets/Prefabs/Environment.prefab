@@ -2227,6 +2227,7 @@ MonoBehaviour:
   - {fileID: 5907705522823415804, guid: a1cbfeadd459d1c4fb22242c4f45432e, type: 3}
   currentWaveEnemies: []
   doorGameObject: {fileID: 5549150330004900324}
+  player_Reference_GO: {fileID: 0}
   currentWave: 0
   spawners:
   - {fileID: 7942561961456707099}
