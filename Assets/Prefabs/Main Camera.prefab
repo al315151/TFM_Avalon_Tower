@@ -197,7 +197,7 @@ MonoBehaviour:
   movementSpeed: 5
   cameraAgent: {fileID: 4000628952034612823}
   launchProjectileZone: {fileID: 2021602830701261749}
-  projectile: {fileID: 8006149379340025720, guid: 22df56d4982800949a56f140e161dbec,
+  projectile: {fileID: 8006149379340025720, guid: ad4b938d84fc3d949a34b9285604b59a,
     type: 3}
 --- !u!54 &8204917401071784111
 Rigidbody:

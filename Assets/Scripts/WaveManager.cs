@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class WaveManager : MonoBehaviour
 {
@@ -26,54 +27,93 @@ public class WaveManager : MonoBehaviour
     public Transform enemyPool;
 
     [Header("UI variables")]
+    public GameObject doorUIHolder;
     public Slider doorUI;
     public Image doorUIFill;
+    public GameObject playerUIHolder;
     public Slider playerUI;
     public Image playerUIFill;
+
+    public GameObject currentWave_GO;
+    public Text CurrentWaveText;
+
+    public GameObject GameOverUIHolder;
+    public Text completedWaves;
+    public Text GameOverText;
+    float timerToReset = 0.0f;
+
+    public GameObject MainMenu_GO;
+    [HideInInspector]
+    public bool gameStarted = false;
 
     // Start is called before the first frame update
     void Start()
     {
         currentInstance = this;
-        currentWave = 0;
-        ProceedToNextWave();
-        SetUIProperties();
+        gameStarted = false;
+        MainMenu_GO.SetActive(true);
     }
 
     // Update is called once per frame
     void Update()
     {
-        UpdateUIProperties();
-
-        //Si borramos algun enemigo, lo quitamos de aqui.
-        for (int i = 0; i < currentWaveEnemies.Count; i++)
+        if (gameStarted)
         {
-            if (currentWaveEnemies[i] == null)
-            { currentWaveEnemies.RemoveAt(i); }
-            else if (whileSpawn == false)
-            {    currentWaveEnemies[i].SetActive(true);     }
-        }
-        //Si no quedan enemigos, pasamos a la siguiente ronda.
-        if (currentWaveEnemies.Count == 0)
-        { ProceedToNextWave(); }
+            if (playerUIHolder.gameObject.activeInHierarchy && doorUIHolder.gameObject.activeInHierarchy)
+            { UpdateUIProperties(); }
+            if (currentWave_GO.activeInHierarchy)
+            { CurrentWaveText.text = "Completed Waves: " + currentWave + " "; }
 
-        //Spawneamos los enemigos.
-        if (whileSpawn)
-        {
-            spawnTimer += Time.deltaTime;
-            if (spawnTimer > spawnInterval)
+            //Si borramos algun enemigo, lo quitamos de aqui.
+            for (int i = 0; i < currentWaveEnemies.Count; i++)
             {
-                //pr si el jugador elimina a alguien cuando todos no están aun spawneados.
-                if (activeEnemyIndex >= currentWaveEnemies.Count)
-                { whileSpawn = false; }
-                else
+                if (currentWaveEnemies[i] == null)
+                { currentWaveEnemies.RemoveAt(i); }
+                else if (whileSpawn == false)
+                { currentWaveEnemies[i].SetActive(true); }
+            }
+            //Si no quedan enemigos, pasamos a la siguiente ronda.
+            if (currentWaveEnemies.Count == 0)
+            { ProceedToNextWave(); }
+
+            //Spawneamos los enemigos.
+            if (whileSpawn)
+            {
+                spawnTimer += Time.deltaTime;
+                if (spawnTimer > spawnInterval)
                 {
-                    currentWaveEnemies[activeEnemyIndex].SetActive(true);
-                    activeEnemyIndex++;
-                    spawnTimer = 0f;
+                    //pr si el jugador elimina a alguien cuando todos no están aun spawneados.
+                    if (activeEnemyIndex >= currentWaveEnemies.Count)
+                    { whileSpawn = false; }
+                    else
+                    {
+                        currentWaveEnemies[activeEnemyIndex].SetActive(true);
+                        activeEnemyIndex++;
+                        spawnTimer = 0f;
+                    }
+                }
+            }
+
+            if (GameOverUIHolder.activeInHierarchy)
+            {
+                float alpha = GameOverUIHolder.GetComponent<Image>().color.a + (Time.deltaTime / 1.5f);
+                GameOverUIHolder.GetComponent<Image>().color = new Color(0.0f, 0.0f, 0.0f, alpha);
+                if (alpha > 0.3f)
+                { GameOverText.gameObject.SetActive(true); }
+                if (alpha > 0.7f)
+                {
+                    UpdateWaveNumber(currentWave);
+                    completedWaves.gameObject.SetActive(true);
+                }
+                if (alpha >= 1f)
+                {
+                    timerToReset += Time.deltaTime;
+                    if (timerToReset > 10f)
+                    { SceneManager.LoadScene(SceneManager.GetActiveScene().name); }
                 }
             }
         }
+        else { Cursor.lockState = CursorLockMode.None; Cursor.visible = true; }
     }
 
     public void ReduceLifeFromObjective(GameObject objective, GameObject sender)
@@ -96,6 +136,11 @@ public class WaveManager : MonoBehaviour
             else { playerLife -= 10f; }
             print(playerLife);
         }
+
+        if ((doorLife <= 0.0f || playerLife <= 0.0f) && GameOverUIHolder.activeInHierarchy == false)
+        {
+            print("Se llama");
+            GameOverAnimation(); }
         
     }
 
@@ -172,9 +217,36 @@ public class WaveManager : MonoBehaviour
 
     }
 
+    void UpdateWaveNumber(int number)
+    {
+        completedWaves.text = "Completed Waves: " + number + "  ";
+    }
 
+    void GameOverAnimation()
+    {
+        doorUIHolder.gameObject.SetActive(false);
+        playerUIHolder.gameObject.SetActive(false);
 
+        GameOverUIHolder.gameObject.SetActive(true);
+        GameOverText.gameObject.SetActive(false);
+        completedWaves.gameObject.SetActive(false);
+        currentWave_GO.SetActive(false);
+        GameOverUIHolder.GetComponent<Image>().color = new Color(0.0f, 0.0f, 0.0f, 0.0f);
+    }
 
+    public void StartGame()
+    {
+        MainMenu_GO.SetActive(false);
+        currentWave = 0;
+        ProceedToNextWave();
+        SetUIProperties();
+        GameOverUIHolder.gameObject.SetActive(false);
+        gameStarted = true;
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+    }
 
+    public void QuitGame()
+    {   Application.Quit();    }
 
 }

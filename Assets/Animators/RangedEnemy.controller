@@ -38,7 +38,7 @@ AnimatorStateTransition:
   m_Conditions:
   - m_ConditionMode: 3
     m_ConditionEvent: DistanceToTarget
-    m_EventTreshold: 10
+    m_EventTreshold: 12.5
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 1102365077982676262}
   m_Solo: 0
@@ -63,7 +63,7 @@ AnimatorStateTransition:
   m_Conditions:
   - m_ConditionMode: 4
     m_ConditionEvent: DistanceToTarget
-    m_EventTreshold: 10
+    m_EventTreshold: 12.5
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 1102185188519408844}
   m_Solo: 0
@@ -99,7 +99,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: d29542a9d17ea4a4f89f4d9bf27fe2fb, type: 3}
+  m_Motion: {fileID: 7400002, guid: d29542a9d17ea4a4f89f4d9bf27fe2fb, type: 3}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 

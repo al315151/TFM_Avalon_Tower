@@ -59,9 +59,10 @@ public class EnemyBehaviour : MonoBehaviour
             {
 
                 enemyAnimator.SetFloat("DistanceToTarget", distance);
-                if (distance < 10f)
+                if (distance < 15f)
                 {
                     targetInRange = true;
+                    ShootingBehaviour();
                     //enemyNavAgent.isStopped = true;
                 }
                 else
@@ -71,12 +72,12 @@ public class EnemyBehaviour : MonoBehaviour
                 }
                 //if (ObjectiveInSight())
                 //{
-                ShootingBehaviour();
+                
                 //}
             }
             else // Si soy Melee...
             {
-                if (distance < 3.0f)
+                if (distance < 7.5f)
                 {
                     //KABOOM
                     WaveManager.currentInstance.ReduceLifeFromObjective(objective, this.gameObject);
@@ -155,6 +156,7 @@ public class EnemyBehaviour : MonoBehaviour
     {
         enemyNavAgent.SetDestination(obj.transform.position);
         objective = obj;
+        print("Nuevo");
     }
 
 

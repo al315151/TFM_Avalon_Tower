@@ -32,31 +32,33 @@ public class CustomFPSMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKey(KeyCode.LeftShift))
+        if (WaveManager.currentInstance.gameStarted)
         {
-            //El doble de lo normal.
-            movementSpeed = 10f;
-        }
-        else { movementSpeed = 5f; }
+            if (Input.GetKey(KeyCode.LeftShift))
+            {
+                //El doble de lo normal.
+                movementSpeed = 10f;
+            }
+            else { movementSpeed = 5f; }
 
-        //if (CheckGrounded())
-        //{
+            //if (CheckGrounded())
+            //{
             PlayerMovement();
-        //}
-        //else
-        //{
-        //    transform.position = new Vector3(transform.position.x,
-        //                                    transform.position.y - 9.8f * Time.deltaTime,
-        //                                    transform.position.z);
-        //}
+            //}
+            //else
+            //{
+            //    transform.position = new Vector3(transform.position.x,
+            //                                    transform.position.y - 9.8f * Time.deltaTime,
+            //                                    transform.position.z);
+            //}
 
-        PlayerRotation();
+            PlayerRotation();
 
-        if (Input.GetMouseButtonDown(0))
-        {
-            ShootAtObjective();
+            if (Input.GetMouseButtonDown(0))
+            {
+                ShootAtObjective();
+            }
         }
-
     }
 
     void PlayerRotation()
