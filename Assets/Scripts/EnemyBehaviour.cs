@@ -43,30 +43,50 @@ public class EnemyBehaviour : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (targetInRange == false)
-        {  enemyNavAgent.SetDestination(objective.transform.position);        }
-
-        if (melee == false)
+        if (objective == null)
         {
-            Vector3 desiredObjectivePosition = new Vector3(objective.transform.position.x, 0f,
-                                                       objective.transform.position.z);
-            float distance = Vector3.Distance(transform.position, desiredObjectivePosition);
-            enemyAnimator.SetFloat("DistanceToTarget", distance);
-            if (distance < 10f)
-            {
-                targetInRange = true;
-                //enemyNavAgent.isStopped = true;
-            }
-            else
-            {
-                targetInRange = false;
-                //enemyNavAgent.isStopped = false;
-            }
-            //if (ObjectiveInSight())
-            //{
-            ShootingBehaviour();
-            //}
+            SetNewTarget(WaveManager.currentInstance.doorGameObject);
         }
+        else
+        {
+            if (targetInRange == false)
+            { enemyNavAgent.SetDestination(objective.transform.position); }
+            Vector3 desiredObjectivePosition = new Vector3(objective.transform.position.x, transform.position.y,
+                                                           objective.transform.position.z);
+            float distance = Vector3.Distance(transform.position, desiredObjectivePosition);
+
+            if (melee == false)
+            {
+
+                enemyAnimator.SetFloat("DistanceToTarget", distance);
+                if (distance < 10f)
+                {
+                    targetInRange = true;
+                    //enemyNavAgent.isStopped = true;
+                }
+                else
+                {
+                    targetInRange = false;
+                    //enemyNavAgent.isStopped = false;
+                }
+                //if (ObjectiveInSight())
+                //{
+                ShootingBehaviour();
+                //}
+            }
+            else // Si soy Melee...
+            {
+                if (distance < 3.0f)
+                {
+                    //KABOOM
+                    WaveManager.currentInstance.ReduceLifeFromObjective(objective, this.gameObject);
+                    Destroy(this.gameObject);
+                }
+            }
+
+
+        }
+
     }
 
     void ShootAtObjective()
@@ -115,16 +135,26 @@ public class EnemyBehaviour : MonoBehaviour
     }
 
 
-    public void ReceiveDamage(float hit)
+    public void ReceiveDamage(float hit, GameObject sender)
     {
         currentEnemyLife -= hit;
-        print("current " + gameObject.name + " life: " + currentEnemyLife);
+        //print("current " + gameObject.name + " life: " + currentEnemyLife);
         if (currentEnemyLife <= 0f)
         {
             Destroy(this.gameObject);
         }
+        else
+        {
+            SetNewTarget(sender);
+        }
+
+    }
 
 
+    public void SetNewTarget(GameObject obj)
+    {
+        enemyNavAgent.SetDestination(obj.transform.position);
+        objective = obj;
     }
 
 

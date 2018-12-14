@@ -8,9 +8,9 @@ public class ProjectileBehaviour : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        print("Entramos?");
+        //print("Entramos?");
         if (other.gameObject != father)
-        { WaveManager.currentInstance.ReduceLifeFromObjective(other.gameObject); }
+        { WaveManager.currentInstance.ReduceLifeFromObjective(other.gameObject, this.gameObject); }
         Destroy(this.gameObject);
     }
 }
