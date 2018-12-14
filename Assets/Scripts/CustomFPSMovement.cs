@@ -13,7 +13,10 @@ public class CustomFPSMovement : MonoBehaviour
     CapsuleCollider cameraCollider;
 
     public NavMeshAgent cameraAgent;
-    
+
+    public GameObject launchProjectileZone;
+    public GameObject projectile;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -29,18 +32,31 @@ public class CustomFPSMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (CheckGrounded())
+        if (Input.GetKey(KeyCode.LeftShift))
         {
+            //El doble de lo normal.
+            movementSpeed = 10f;
+        }
+        else { movementSpeed = 5f; }
+
+        //if (CheckGrounded())
+        //{
             PlayerMovement();
-        }
-        else
-        {
-            transform.position = new Vector3(transform.position.x,
-                                            transform.position.y - 9.8f * Time.deltaTime,
-                                            transform.position.z);
-        }
+        //}
+        //else
+        //{
+        //    transform.position = new Vector3(transform.position.x,
+        //                                    transform.position.y - 9.8f * Time.deltaTime,
+        //                                    transform.position.z);
+        //}
 
         PlayerRotation();
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            ShootAtObjective();
+        }
+
     }
 
     void PlayerRotation()
@@ -80,7 +96,17 @@ public class CustomFPSMovement : MonoBehaviour
                hit.transform.gameObject.name != gameObject.name;
     }
 
+    void ShootAtObjective()
+    {
+        GameObject proj = Instantiate(projectile, launchProjectileZone.transform.position,
+                                      launchProjectileZone.transform.rotation);
 
+        proj.name = gameObject.name + " Missile";
+
+        proj.GetComponent<Rigidbody>().AddForce(transform.forward * 1000f);
+        //Por si acaso, para eitar cosas injustas haremos que desaparezca en 5 seg si no choca con nada.
+        Destroy(proj, 5f);
+    }
 
 
 }

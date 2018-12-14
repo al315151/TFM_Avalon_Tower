@@ -8,13 +8,17 @@ public class WaveManager : MonoBehaviour
     public GameObject[] enemyTypes;
     public List<GameObject> currentWaveEnemies;
 
+    [Header("Environment variables")]
+    public GameObject doorGameObject;
+
     [Header("Game variables")]
     public int currentWave;
-
+    public static WaveManager currentInstance;
 
     // Start is called before the first frame update
     void Start()
     {
+        currentInstance = this;
         currentWave = 1;
         
     }
@@ -25,7 +29,14 @@ public class WaveManager : MonoBehaviour
         
     }
 
-
+    public void ReduceLifeFromObjective(GameObject objective)
+    {
+        if (objective.tag == "Enemy")
+        {
+            objective.GetComponent<EnemyBehaviour>().ReceiveDamage(20f);
+        }
+        print("Ha chocado Paco!!!");
+    }
 
 
 
